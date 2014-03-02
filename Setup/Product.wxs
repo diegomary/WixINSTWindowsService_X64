@@ -12,16 +12,22 @@
     <Property Id ="USER" Value="LocalSystem" />
     <Property Id ="PASSWORD" Value="PASSWORD" />   
 		<Feature Id="ProductFeature" Title="Setup" Level="1">
-      <ComponentRef Id="ServiceManager"/>      
-		</Feature>     
+      <ComponentRef Id="ServiceManager"/>
+      <ComponentRef Id="DocManager"/>
+    </Feature>     
 	</Product>
 	<Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFiles64Folder" >
-        <Directory Id="APPLICATIONROOTDIRECTORY" Name="DiegoAldoBurlando"/>
+      <Directory Id="ProgramFiles64Folder" >       
+        <Directory Id="APPLICATIONROOTDIRECTORY" Name="WixServiceRootDir">
+          <Directory Id="APPLICATIONDOCDIRECTORY" Name="WixServiceDoc"/> 
+        </Directory>
       </Directory>
     </Directory>
-      <Component Win64="yes" Id="ServiceManager" Guid="AB9D0FB4-4081-4457-9F13-E26125DBEAFA" Directory="APPLICATIONROOTDIRECTORY" >
+    <Component Win64="yes"  Id="DocManager" Guid="{A117647A-6080-4582-B01E-CBAC52B67A01}" Directory="APPLICATIONDOCDIRECTORY" >
+      <File	Id="DocFile" Name="Solid_Principles.docx" Source="$(var.BasicServiceWithWIXinstaller.ProjectDir)\Documents\Solid_Principles.docx" DiskId="1"/>
+     </Component>    
+      <Component Win64="yes" Id="ServiceManager" Guid="{99639264-15CF-4154-92F0-9A00BEFC1E48}" Directory="APPLICATIONROOTDIRECTORY" >
         <File	Id="ServiceFile" Name="$(var.BasicServiceWithWIXinstaller.TargetFileName)" Source="$(var.BasicServiceWithWIXinstaller.TargetPath)" DiskId="1"/>
         <!-- Windows service settings -->
         <ServiceInstall Id="ServiceInstall"

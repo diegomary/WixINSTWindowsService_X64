@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+   xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">   
+	<Product Id="{2C6100C6-A636-4757-8530-DC0F01E601F1}" Name="WIX Setup Installation of BAsic Windows Service" Language="1033" Version="1.0.0.0" Manufacturer="Diego Aldo Burlando" UpgradeCode="12d9ed4d-3cd8-4a2e-80eb-93122111b99b">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <PropertyRef Id="NETFRAMEWORK45"/>
+    <Condition  Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK45]]>
+    </Condition>   
+    <Property Id ="USER" Value="LocalSystem" />
+    <Property Id ="PASSWORD" Value="PASSWORD" />   
+		<Feature Id="ProductFeature" Title="Setup" Level="1">
+      <ComponentRef Id="ServiceManager"/>      
+		</Feature>     
+	</Product>
+	<Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder" >
+        <Directory Id="APPLICATIONROOTDIRECTORY" Name="DiegoAldoBurlando"/>
+      </Directory>
+    </Directory>
+      <Component Win64="yes" Id="ServiceManager" Guid="AB9D0FB4-4081-4457-9F13-E26125DBEAFA" Directory="APPLICATIONROOTDIRECTORY" >
+        <File	Id="ServiceFile" Name="$(var.BasicServiceWithWIXinstaller.TargetFileName)" Source="$(var.BasicServiceWithWIXinstaller.TargetPath)" DiskId="1"/>
+        <!-- Windows service settings -->
+        <ServiceInstall Id="ServiceInstall"
+         Account="[USER]"
+         Password="[PASSWORD]"
+          Name="BAsicWIXService"
+          DisplayName="My Basic Service"
+          Type="ownProcess"
+          Interactive="no"
+          Start="auto"
+          Vital="yes"
+          ErrorControl="normal"
+          Description="Simple Installed Windows Service WXI" >
+        </ServiceInstall>
+        <ServiceControl Id="ServiceControl"
+          Name="BAsicWIXService"
+          Start="install"
+          Stop="both"
+          Remove="uninstall"
+          Wait="yes" />
+      </Component>
+  </Fragment>
+</Wix>
